@@ -1,11 +1,12 @@
-﻿using DaHo.M151.DataFormatValidator.Models;
+﻿using DaHo.M151.DataFormatValidator.Abstractions;
+using DaHo.M151.DataFormatValidator.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using System;
 using System.Collections.Generic;
 
-namespace DaHo.M151.DataFormatValidator.Abstractions.Services
+namespace DaHo.M151.DataFormatValidator.Services
 {
     public class JsonFormatService : IDataFormatService
     {

@@ -1,5 +1,4 @@
 ﻿using DaHo.M151.DataFormatValidator.Models;
-using System.Collections.Generic;
 
 namespace DaHo.M151.DataFormatValidator.Abstractions
 {

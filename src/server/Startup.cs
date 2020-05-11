@@ -1,7 +1,8 @@
 using DaHo.Library.AspNetCore;
 using DaHo.M151.DataFormatValidator.Abstractions;
-using DaHo.M151.DataFormatValidator.Abstractions.Services;
 using DaHo.M151.DataFormatValidator.Data;
+using DaHo.M151.DataFormatValidator.Data.Repositories;
+using DaHo.M151.DataFormatValidator.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +37,8 @@ namespace DaHo.M151.DataFormatValidator
             services.AddTransient<IDataFormatService, JsonFormatService>();
             services.AddTransient<IDataFormatService, XmlFormatService>();
             services.AddTransient<IDataFormatService, YamlFormatService>();
+
+            services.AddTransient<ISchemaRepository, SchemaRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

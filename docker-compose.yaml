@@ -11,6 +11,7 @@ services:
       POSTGRES_DB: dataformatvalidator
     ports:
         - 5432:5432
+    restart: always
 
   web:
     build: ./src/server/
@@ -18,3 +19,6 @@ services:
       ASPNETCORE_URLS: "http://*:5000"
     ports:
       - 5000:5000
+    depends_on: 
+      - db
+    restart: always

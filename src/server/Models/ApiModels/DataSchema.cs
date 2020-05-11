@@ -2,15 +2,15 @@
 
 namespace DaHo.M151.DataFormatValidator.Models.ApiModels
 {
-    public class ConvertFormatRequest
+    public class DataSchema
     {
         [Required]
-        public DataFormat From { get; set; }
+        public DataFormat ForFormat { get; set; }
 
         [Required]
-        public DataFormat To { get; set; }
+        public string Name { get; set; }
 
         [Required]
-        public string Content { get; set; }
+        public string Schema { get; set; }
     }
 }

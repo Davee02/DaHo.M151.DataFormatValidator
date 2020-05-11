@@ -1,7 +1,8 @@
-﻿using DaHo.M151.DataFormatValidator.Models;
+﻿using DaHo.M151.DataFormatValidator.Abstractions;
+using DaHo.M151.DataFormatValidator.Models;
 using System;
 
-namespace DaHo.M151.DataFormatValidator.Abstractions.Services
+namespace DaHo.M151.DataFormatValidator.Services
 {
     public class XmlFormatService : IDataFormatService
     {

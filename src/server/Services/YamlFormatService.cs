@@ -1,11 +1,8 @@
-﻿using DaHo.M151.DataFormatValidator.Models;
+﻿using DaHo.M151.DataFormatValidator.Abstractions;
+using DaHo.M151.DataFormatValidator.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DaHo.M151.DataFormatValidator.Abstractions.Services
+namespace DaHo.M151.DataFormatValidator.Services
 {
     public class YamlFormatService : IDataFormatService
     {

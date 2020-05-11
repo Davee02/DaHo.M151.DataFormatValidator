@@ -1,0 +1,94 @@
+﻿using DaHo.M151.DataFormatValidator.Abstractions;
+using DaHo.M151.DataFormatValidator.Models.ApiModels;
+using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace DaHo.M151.DataFormatValidator.Controllers
+{
+    [ApiController]
+    [Route("[controller]")]
+    public class SchemasController : ControllerBase
+    {
+        private readonly ISchemaRepository _schemaRepository;
+
+        public SchemasController(ISchemaRepository schemaRepository)
+        {
+            _schemaRepository = schemaRepository;
+        }
+
+        [Route("")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllSchemas()
+        {
+            var schemas = await _schemaRepository.GetAllAsync();
+            var response = schemas.Select(x => new DataSchema
+            {
+                ForFormat = x.ForFormat,
+                Schema = x.Schema,
+                Name = x.SchemaName
+            });
+
+            return Ok(response);
+        }
+
+        [Route("{schemaName}")]
+        [HttpGet]
+        public async Task<IActionResult> GetSchema(string schemaName)
+        {
+            var foundSchema = await _schemaRepository.GetByNameAsync(schemaName);
+
+            if (foundSchema == null)
+            {
+                return NotFound($"The schema with the name '{schemaName}' does not exist");
+            }
+
+            var response = new DataSchema
+            {
+                ForFormat = foundSchema.ForFormat,
+                Schema = foundSchema.Schema,
+                Name = foundSchema.SchemaName
+            };
+
+            return Ok(response);
+        }
+
+        [Route("")]
+        [HttpPost]
+        public async Task<IActionResult> CreateSchema([FromBody] DataSchema schema)
+        {
+            var foundSchema = await _schemaRepository.GetByNameAsync(schema.Name);
+
+            if(foundSchema != null)
+            {
+                return BadRequest($"A schema with the name '{schema.Name}' already exists");
+            }
+
+            var storageModel = new Models.StorageModels.DataSchema
+            {
+                ForFormat = schema.ForFormat,
+                Schema = schema.Schema,
+                SchemaName = schema.Name
+            };
+            await _schemaRepository.CreateAsync(storageModel);
+
+            return Ok();
+        }
+
+        [Route("{schemaName}")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteSchema(string schemaName)
+        {
+            var foundSchema = await _schemaRepository.GetByNameAsync(schemaName);
+
+            if(foundSchema == null)
+            {
+                return NotFound($"The schema with the name '{schemaName}' does not exist");
+            }
+
+            await _schemaRepository.DeleteAsync(foundSchema);
+
+            return Ok();
+        }
+    }
+}
