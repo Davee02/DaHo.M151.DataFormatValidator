@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DaHo.M151.DataFormatValidator.Controllers
 {
@@ -12,10 +13,14 @@ namespace DaHo.M151.DataFormatValidator.Controllers
     public class DataFormatController : ControllerBase
     {
         private readonly IEnumerable<IDataFormatService> _dataFormatServices;
+        private readonly ISchemaRepository _schemaRepository;
 
-        public DataFormatController(IEnumerable<IDataFormatService> dataFormatServices)
+        public DataFormatController(
+            IEnumerable<IDataFormatService> dataFormatServices, 
+            ISchemaRepository schemaRepository)
         {
             _dataFormatServices = dataFormatServices;
+            _schemaRepository = schemaRepository;
         }
 
         [Route("convert")]
@@ -35,13 +40,13 @@ namespace DaHo.M151.DataFormatValidator.Controllers
                 return BadRequest("The source dataformat is not supported");
             }
 
-            var deserializeResult = sourceDataFormatService.Deserialize(request.Content);
+            (bool Success, string ErrorMessage, dynamic Converted) deserializeResult = sourceDataFormatService.Deserialize(request.Content);
             if (!deserializeResult.Success)
             {
                 return BadRequest($"The source-content is not valid: ${deserializeResult.ErrorMessage}");
             }
 
-            var serializeContent = targetDataFormatService.Serialize(deserializeResult.Converted);
+            (bool Success, string ErrorMessage, string Converted) serializeContent = targetDataFormatService.Serialize(deserializeResult.Converted);
             if (!serializeContent.Success)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"The content could not be converted to the specified dataformat: ${serializeContent.ErrorMessage}");
@@ -64,6 +69,29 @@ namespace DaHo.M151.DataFormatValidator.Controllers
             }
 
             var validationResult = dataFormatService.Validate(request.Content);
+            var response = new ValidateFormatResponse { IsValid = validationResult.Success, ErrorMessage = validationResult.ErrorMessage };
+
+            return Ok(response);
+        }
+
+        [Route("validate/{schemaName}")]
+        [HttpPost]
+        public async Task<IActionResult> ValidateFormatWithSchema(ValidateFormatRequest request, string schemaName)
+        {
+            var dataFormatService = _dataFormatServices.FirstOrDefault(x => x.Format == request.Format);
+
+            if (dataFormatService == null)
+            {
+                return BadRequest("The dataformat is not supported");
+            }
+
+            var schema = await _schemaRepository.GetByNameAsync(schemaName);
+            if (schema == null)
+            {
+                return NotFound($"The schema with the name '{schemaName}' does not exist");
+            }
+
+            var validationResult = dataFormatService.ValidateWithSchema(request.Content, schema.Schema);
             var response = new ValidateFormatResponse { IsValid = validationResult.Success, ErrorMessage = validationResult.ErrorMessage };
 
             return Ok(response);

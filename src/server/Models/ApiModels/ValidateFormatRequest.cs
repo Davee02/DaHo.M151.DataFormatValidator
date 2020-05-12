@@ -7,7 +7,7 @@ namespace DaHo.M151.DataFormatValidator.Models.ApiModels
         [Required]
         public DataFormat Format { get; set; }
 
-        [Required]
+        [Required(AllowEmptyStrings =true)]
         public string Content { get; set; }
     }
 }

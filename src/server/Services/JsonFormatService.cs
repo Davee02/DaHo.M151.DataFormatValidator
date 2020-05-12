@@ -12,13 +12,6 @@ namespace DaHo.M151.DataFormatValidator.Services
     {
         public DataFormat Format => DataFormat.JSON;
 
-        public (bool Success, string ErrorMessage, string Converted) Serialize(dynamic content)
-        {
-            var serialized = JsonConvert.SerializeObject(content);
-
-            return (true, null, serialized);
-        }
-
         public (bool Success, string ErrorMessage, dynamic Converted) Deserialize(string content)
         {
             var validationResult = Validate(content);
@@ -30,6 +23,27 @@ namespace DaHo.M151.DataFormatValidator.Services
             var deserialized = JsonConvert.DeserializeObject<dynamic>(content);
 
             return (true, null, deserialized);
+        }
+
+        public (bool Success, string ErrorMessage, string Converted) Serialize(dynamic content)
+        {
+            var serialized = JsonConvert.SerializeObject(content);
+
+            return (true, null, serialized);
+        }
+
+        public (bool Success, string ErrorMessage) Validate(string content)
+        {
+            try
+            {
+                JToken.Parse(content);
+            }
+            catch (JsonReaderException ex)
+            {
+                return (false, ex.Message);
+            }
+
+            return (true, null);
         }
 
         public (bool Success, string ErrorMessage) ValidateWithSchema(string content, string schema)
@@ -57,20 +71,6 @@ namespace DaHo.M151.DataFormatValidator.Services
             {
                 return (false, string.Join(Environment.NewLine, errors));
             }
-        }
-
-        public (bool Success, string ErrorMessage) Validate(string content)
-        {
-            try
-            {
-                JToken.Parse(content);
-            }
-            catch (JsonReaderException ex)
-            {
-                return (false, ex.Message);
-            }
-
-            return (true, null);
         }
     }
 }
