@@ -34,6 +34,11 @@ namespace DaHo.M151.DataFormatValidator
             services.AddDbContext<DataContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = Configuration.GetConnectionString("Redis");
+            });
+
             services.AddTransient<IDataFormatService, JsonFormatService>();
             services.AddTransient<IDataFormatService, XmlFormatService>();
             services.AddTransient<IDataFormatService, YamlFormatService>();
@@ -47,8 +52,6 @@ namespace DaHo.M151.DataFormatValidator
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseHttpsRedirection();
 
             app.UseRouting();
 

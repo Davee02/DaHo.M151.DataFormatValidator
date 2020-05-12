@@ -22,3 +22,11 @@ services:
     depends_on: 
       - db
     restart: always
+
+  redis:
+    image: 'bitnami/redis'
+    environment:
+      REDIS_PASSWORD: mystrongpassword
+    ports:
+      - 6379:6379
+    restart: always
