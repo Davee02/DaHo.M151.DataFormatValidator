@@ -1,5 +1,6 @@
 ﻿using DaHo.M151.DataFormatValidator.Abstractions;
 using DaHo.M151.DataFormatValidator.Models.ApiModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace DaHo.M151.DataFormatValidator.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class DataFormatController : ControllerBase
@@ -23,8 +25,7 @@ namespace DaHo.M151.DataFormatValidator.Controllers
             _schemaRepository = schemaRepository;
         }
 
-        [Route("convert")]
-        [HttpPost]
+        [HttpPost("convert")]
         public IActionResult ConvertFormat(ConvertFormatRequest request)
         {
             var sourceDataFormatService = _dataFormatServices.FirstOrDefault(x => x.Format == request.From);
@@ -57,8 +58,7 @@ namespace DaHo.M151.DataFormatValidator.Controllers
             return Ok(response);
         }
 
-        [Route("validate")]
-        [HttpPost]
+        [HttpPost("validate")]
         public IActionResult ValidateFormat(ValidateFormatRequest request)
         {
             var dataFormatService = _dataFormatServices.FirstOrDefault(x => x.Format == request.Format);
@@ -74,8 +74,7 @@ namespace DaHo.M151.DataFormatValidator.Controllers
             return Ok(response);
         }
 
-        [Route("validate/{schemaName}")]
-        [HttpPost]
+        [HttpPost("validate/{schemaName}")]
         public async Task<IActionResult> ValidateFormatWithSchema(ValidateFormatRequest request, string schemaName)
         {
             var dataFormatService = _dataFormatServices.FirstOrDefault(x => x.Format == request.Format);

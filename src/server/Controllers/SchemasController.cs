@@ -1,11 +1,14 @@
 ﻿using DaHo.M151.DataFormatValidator.Abstractions;
 using DaHo.M151.DataFormatValidator.Models.ApiModels;
+using DaHo.M151.DataFormatValidator.Models.ServiceModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace DaHo.M151.DataFormatValidator.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class SchemasController : ControllerBase
@@ -17,8 +20,7 @@ namespace DaHo.M151.DataFormatValidator.Controllers
             _schemaRepository = schemaRepository;
         }
 
-        [Route("")]
-        [HttpGet]
+        [HttpGet("")]
         public async Task<IActionResult> GetAllSchemas()
         {
             var schemas = await _schemaRepository.GetAllAsync();
@@ -32,8 +34,7 @@ namespace DaHo.M151.DataFormatValidator.Controllers
             return Ok(response);
         }
 
-        [Route("{schemaName}")]
-        [HttpGet]
+        [HttpGet("{schemaName}")]
         public async Task<IActionResult> GetSchema(string schemaName)
         {
             var foundSchema = await _schemaRepository.GetByNameAsync(schemaName);
@@ -53,8 +54,8 @@ namespace DaHo.M151.DataFormatValidator.Controllers
             return Ok(response);
         }
 
-        [Route("")]
-        [HttpPost]
+        [Authorize(Roles = Role.Admin)]
+        [HttpPost("")]
         public async Task<IActionResult> CreateSchema([FromBody] DataSchema schema)
         {
             var foundSchema = await _schemaRepository.GetByNameAsync(schema.Name);
@@ -75,8 +76,8 @@ namespace DaHo.M151.DataFormatValidator.Controllers
             return Ok();
         }
 
-        [Route("{schemaName}")]
-        [HttpDelete]
+        [Authorize(Roles = Role.Admin)]
+        [HttpDelete("{schemaName}")]
         public async Task<IActionResult> DeleteSchema(string schemaName)
         {
             var foundSchema = await _schemaRepository.GetByNameAsync(schemaName);

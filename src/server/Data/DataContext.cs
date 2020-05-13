@@ -11,5 +11,7 @@ namespace DaHo.M151.DataFormatValidator.Data
         }
 
         public DbSet<DataSchema> DataSchemas { get; set; }
+
+        public DbSet<User> Users { get; set; }
     }
 }

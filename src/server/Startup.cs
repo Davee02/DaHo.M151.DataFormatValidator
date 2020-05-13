@@ -1,14 +1,18 @@
 using DaHo.Library.AspNetCore;
 using DaHo.M151.DataFormatValidator.Abstractions;
+using DaHo.M151.DataFormatValidator.Abstractions.Helpers;
 using DaHo.M151.DataFormatValidator.Data;
 using DaHo.M151.DataFormatValidator.Data.Repositories;
 using DaHo.M151.DataFormatValidator.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace DaHo.M151.DataFormatValidator
@@ -30,6 +34,30 @@ namespace DaHo.M151.DataFormatValidator
                     opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 });
 
+            // configure strongly typed settings objects
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+
+            // configure jwt authentication
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
 
             services.AddDbContext<DataContext>(options =>
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
@@ -39,11 +67,13 @@ namespace DaHo.M151.DataFormatValidator
                 options.Configuration = Configuration.GetConnectionString("Redis");
             });
 
-            services.AddTransient<IDataFormatService, JsonFormatService>();
-            services.AddTransient<IDataFormatService, XmlFormatService>();
-            services.AddTransient<IDataFormatService, YamlFormatService>();
+            services.AddScoped<IDataFormatService, JsonFormatService>();
+            services.AddScoped<IDataFormatService, XmlFormatService>();
+            services.AddScoped<IDataFormatService, YamlFormatService>();
+            services.AddScoped<IUserService, UserService>();
 
-            services.AddTransient<ISchemaRepository, SchemaRepository>();
+            services.AddScoped<ISchemaRepository, SchemaRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -55,9 +85,11 @@ namespace DaHo.M151.DataFormatValidator
 
             app.UseRouting();
 
-            app.UseAuthorization();
-
             app.MigrateDatabase<DataContext>();
+            app.SeedData();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
