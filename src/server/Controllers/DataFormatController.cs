@@ -1,4 +1,5 @@
 ﻿using DaHo.M151.DataFormatValidator.Abstractions;
+using DaHo.M151.DataFormatValidator.Models;
 using DaHo.M151.DataFormatValidator.Models.ApiModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DaHo.Library.Utilities;
 
 namespace DaHo.M151.DataFormatValidator.Controllers
 {
@@ -18,7 +20,7 @@ namespace DaHo.M151.DataFormatValidator.Controllers
         private readonly ISchemaRepository _schemaRepository;
 
         public DataFormatController(
-            IEnumerable<IDataFormatService> dataFormatServices, 
+            IEnumerable<IDataFormatService> dataFormatServices,
             ISchemaRepository schemaRepository)
         {
             _dataFormatServices = dataFormatServices;
@@ -94,6 +96,20 @@ namespace DaHo.M151.DataFormatValidator.Controllers
             var response = new ValidateFormatResponse { IsValid = validationResult.Success, ErrorMessage = validationResult.ErrorMessage };
 
             return Ok(response);
+        }
+
+        [HttpGet("list")]
+        public Task<IActionResult> GetAllDataFormats()
+        {
+            var allFormats = EnumUtilities
+                .GetEnumValues<DataFormat>()
+                .Select(x => new
+                {
+                    Key = x.ToString().ToLower(),
+                    Value = x.ToString().ToUpper()
+                });
+
+            return Task.FromResult<IActionResult>(Ok(allFormats));
         }
     }
 }
