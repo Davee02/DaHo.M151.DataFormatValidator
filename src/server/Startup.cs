@@ -28,6 +28,7 @@ namespace DaHo.M151.DataFormatValidator
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddControllers()
                 .AddJsonOptions(opts =>
                 {
@@ -78,6 +79,13 @@ namespace DaHo.M151.DataFormatValidator
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors(
+                options => options
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+            );
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

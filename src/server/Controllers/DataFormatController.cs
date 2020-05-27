@@ -11,7 +11,7 @@ using DaHo.Library.Utilities;
 
 namespace DaHo.M151.DataFormatValidator.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("[controller]")]
     public class DataFormatController : ControllerBase
