@@ -1,0 +1,17 @@
+<select [(ngModel)]="sourceDataFormat">
+  <option *ngFor="let dataFormat of allDataFormats" [value]="dataFormat.key">
+    {{ dataFormat.value }}
+  </option>
+</select>
+<select [(ngModel)]="destinationDataFormat">
+  <option *ngFor="let dataFormat of allDataFormats" [value]="dataFormat.key">
+    {{ dataFormat.value }}
+  </option>
+</select>
+<br />
+
+<textarea [(ngModel)]="content" cols="30" rows="10"></textarea>
+<textarea [value]="convertResult?.converted" cols="30" rows="10" readonly></textarea>
+<br>
+
+<button (click)="convertContent()" [disabled]="!content || !sourceDataFormat || !destinationDataFormat">Convert</button>

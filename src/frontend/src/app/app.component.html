@@ -1,3 +1,11 @@
-<select>
-  <option *ngFor="let dataFormat of allDataFormats" [value]="dataFormat.key">{{ dataFormat.value }}</option>
-</select>
+<h1>DaHo.M151.DataFormatValidator</h1>
+
+<nav>
+  <ul>
+    <li><a routerLink="/validate" routerLinkActive="active">Validate</a></li>
+    <li><a routerLink="/convert" routerLinkActive="active">Convert</a></li>
+    <li><a routerLink="/schema" routerLinkActive="active">Schema</a></li>
+  </ul>
+</nav>
+<hr />
+<router-outlet></router-outlet>

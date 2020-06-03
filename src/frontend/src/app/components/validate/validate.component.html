@@ -1,0 +1,16 @@
+<select [(ngModel)]="selectedDataFormat">
+    <option *ngFor="let dataFormat of allDataFormats" [value]="dataFormat.key">
+      {{ dataFormat.value }}
+    </option>
+  </select>
+  <br>
+
+  <textarea [(ngModel)]="content" cols="30" rows="10"></textarea>
+  <br>
+
+  <button (click)="validateContent()" [disabled]="!content || !selectedDataFormat">Validate</button>
+  <br>
+
+  <b *ngIf="validateResult && validateResult.isValid" class="success">{{ selectedDataFormat }} is valid!</b>
+  <b *ngIf="validateResult && !validateResult.isValid" class="error">{{ selectedDataFormat }} is invalid! ({{ validateResult.errorMessage }})</b>
+  

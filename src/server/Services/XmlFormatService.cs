@@ -31,7 +31,7 @@ namespace DaHo.M151.DataFormatValidator.Services
         public (bool Success, string ErrorMessage, string Converted) Serialize(dynamic content)
         {
             var json = JsonConvert.SerializeObject(content);
-            var node = JsonConvert.DeserializeXNode(json);
+            var node = JsonConvert.DeserializeXNode(json, "root");
             var serialized = node.ToString();
 
             return (true, null, serialized);
