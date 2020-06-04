@@ -13,6 +13,8 @@ export class SchemaComponent implements OnInit {
   public allDataFormats: DataFormat[];
   public allSchemas: DataSchema[];
 
+  public selectedSchema: DataSchema;
+
   constructor(
     private dataFormatService: DataFormatService,
     private schemaService: SchemaService
@@ -31,5 +33,19 @@ export class SchemaComponent implements OnInit {
     await this.ngOnInit();
   }
 
-  public async editSchema(): Promise<void> {}
+  public editSchema(dataSchema: DataSchema): void {
+    this.selectedSchema = dataSchema;
+  }
+
+  public addSchema(): void {
+    const newSchema = { name: "New schema", schema: "", forFormat: "" };
+    this.allSchemas.push();
+    this.editSchema(newSchema);
+  }
+
+  public async save(): Promise<void> {
+    await this.schemaService
+      .editSchema(this.selectedSchema, this.selectedSchema.name)
+      .toPromise();
+  }
 }

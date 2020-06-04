@@ -28,7 +28,7 @@ namespace DaHo.M151.DataFormatValidator.Controllers
         }
 
         [HttpPost("convert")]
-        public IActionResult ConvertFormat(ConvertFormatRequest request)
+        public IActionResult ConvertFormat([FromBody] ConvertFormatRequest request)
         {
             var sourceDataFormatService = _dataFormatServices.FirstOrDefault(x => x.Format == request.From);
             var targetDataFormatService = _dataFormatServices.FirstOrDefault(x => x.Format == request.To);
@@ -61,7 +61,7 @@ namespace DaHo.M151.DataFormatValidator.Controllers
         }
 
         [HttpPost("validate")]
-        public IActionResult ValidateFormat(ValidateFormatRequest request)
+        public IActionResult ValidateFormat([FromBody] ValidateFormatRequest request)
         {
             var dataFormatService = _dataFormatServices.FirstOrDefault(x => x.Format == request.Format);
 
@@ -77,7 +77,7 @@ namespace DaHo.M151.DataFormatValidator.Controllers
         }
 
         [HttpPost("validate/{schemaName}")]
-        public async Task<IActionResult> ValidateFormatWithSchema(ValidateFormatRequest request, string schemaName)
+        public async Task<IActionResult> ValidateFormatWithSchema([FromBody] ValidateFormatRequest request, [FromRoute] string schemaName)
         {
             var dataFormatService = _dataFormatServices.FirstOrDefault(x => x.Format == request.Format);
 

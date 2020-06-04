@@ -35,7 +35,7 @@ namespace DaHo.M151.DataFormatValidator.Controllers
         }
 
         [HttpGet("{schemaName}")]
-        public async Task<IActionResult> GetSchema(string schemaName)
+        public async Task<IActionResult> GetSchema([FromRoute] string schemaName)
         {
             var foundSchema = await _schemaRepository.GetByNameAsync(schemaName);
 
@@ -77,8 +77,32 @@ namespace DaHo.M151.DataFormatValidator.Controllers
         }
 
         //[Authorize(Roles = Role.Admin)]
+        [HttpPost("{schemaName}")]
+        public async Task<IActionResult> EditSchema([FromBody] DataSchema schema, [FromRoute] string schemaName)
+        {
+            if(!string.Equals(schema.Name, schemaName))
+            {
+                return BadRequest("The schema name cannot be updated");
+            }
+
+            var foundSchema = await _schemaRepository.GetByNameAsync(schemaName);
+
+            if (foundSchema == null)
+            {
+                return NotFound($"The schema with the name '{schemaName}' does not exist");
+            }
+
+            foundSchema.ForFormat = schema.ForFormat;
+            foundSchema.Schema = schema.Schema;
+
+            await _schemaRepository.UpdateAsync(foundSchema);
+
+            return Ok();
+        }
+
+        //[Authorize(Roles = Role.Admin)]
         [HttpDelete("{schemaName}")]
-        public async Task<IActionResult> DeleteSchema(string schemaName)
+        public async Task<IActionResult> DeleteSchema([FromRoute] string schemaName)
         {
             var foundSchema = await _schemaRepository.GetByNameAsync(schemaName);
 

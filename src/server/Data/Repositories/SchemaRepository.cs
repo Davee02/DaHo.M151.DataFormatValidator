@@ -59,5 +59,13 @@ namespace DaHo.M151.DataFormatValidator.Data.Repositories
 
             await base.DeleteAsync(entity);
         }
+
+        public async override Task UpdateAsync(DataSchema entity)
+        {
+            await _cache.RemoveAsync(_cacheKeyGenerator(entity.SchemaName));
+            await _cache.RemoveAsync(ALL_SCHEMAS_CACHE_KEY);
+
+            await base.UpdateAsync(entity);
+        }
     }
 }

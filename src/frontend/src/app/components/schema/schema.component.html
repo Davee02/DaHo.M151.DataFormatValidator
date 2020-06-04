@@ -1,5 +1,25 @@
 <ul>
   <li *ngFor="let schema of allSchemas">
-    {{ schema.name }} <button (click)="deleteSchema(schema.name)">delete</button> <button (click)="editSchema()">edit</button>
+    {{ schema.name }} <button (click)="deleteSchema(schema.name)">delete</button> <button (click)="editSchema(schema)">edit</button>
   </li>
 </ul>
+
+<button (click)="addSchema()">Add new</button>
+
+<div *ngIf="selectedSchema">
+
+  <select [(ngModel)]="selectedSchema.forFormat">
+    <option *ngFor="let dataFormat of allDataFormats" [value]="dataFormat.key.toUpperCase()">
+      {{ dataFormat.value }}
+    </option>
+  </select>
+  <br>
+
+  <input type="text" [(ngModel)]="selectedSchema.name" readonly>
+  <br>
+
+  <textarea [(ngModel)]="selectedSchema.schema"></textarea>
+
+  <button (click)="save()">Save</button>
+
+</div>

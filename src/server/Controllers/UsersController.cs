@@ -43,7 +43,7 @@ namespace DaHo.M151.DataFormatValidator.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById([FromRoute] int id)
         {
             // only allow admins to access other user records
             var currentUserId = int.Parse(User.Identity.Name);
