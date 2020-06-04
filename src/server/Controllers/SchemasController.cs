@@ -76,7 +76,7 @@ namespace DaHo.M151.DataFormatValidator.Controllers
             return Ok();
         }
 
-        [Authorize(Roles = Role.Admin)]
+        //[Authorize(Roles = Role.Admin)]
         [HttpDelete("{schemaName}")]
         public async Task<IActionResult> DeleteSchema(string schemaName)
         {

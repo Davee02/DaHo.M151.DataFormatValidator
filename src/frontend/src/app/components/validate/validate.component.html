@@ -2,15 +2,15 @@
     <option *ngFor="let dataFormat of allDataFormats" [value]="dataFormat.key">
       {{ dataFormat.value }}
     </option>
-  </select>
-  <select [(ngModel)]="selectedSchema" *ngIf="withSchema">
-    <ng-container *ngFor="let schema of allSchemas">
-      <option *ngIf="schema.forFormat.toLowerCase() === selectedDataFormat.toLowerCase()" [value]="schema.name">
-        {{ schema.name }}
-      </option>
-    </ng-container>
-  </select>
-  <br>
+</select>
+<select [(ngModel)]="selectedSchema" *ngIf="withSchema">
+  <ng-container *ngFor="let schema of allSchemas">
+    <option *ngIf="schema.forFormat.toLowerCase() === selectedDataFormat.toLowerCase()" [value]="schema.name">
+      {{ schema.name }}
+    </option>
+  </ng-container>
+</select>
+<br>
 
 <label for="withSchema">With schema</label>
 <input type="checkbox" [(ngModel)]="withSchema" id="withSchema">

@@ -1,1 +1,5 @@
-<p>schema works!</p>
+<ul>
+  <li *ngFor="let schema of allSchemas">
+    {{ schema.name }} <button (click)="deleteSchema(schema.name)">delete</button> <button (click)="editSchema()">edit</button>
+  </li>
+</ul>

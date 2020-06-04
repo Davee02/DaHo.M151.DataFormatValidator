@@ -41,7 +41,7 @@ namespace DaHo.M151.DataFormatValidator.Data.Repositories
 
         public override async Task<IEnumerable<DataSchema>> GetAllAsync()
         {
-            var schemas = await _cache.GetObjectAsync<IEnumerable<DataSchema>>("AllSchemas");
+            var schemas = await _cache.GetObjectAsync<IEnumerable<DataSchema>>(ALL_SCHEMAS_CACHE_KEY);
 
             if (schemas == null)
             {
@@ -55,6 +55,7 @@ namespace DaHo.M151.DataFormatValidator.Data.Repositories
         public override async Task DeleteAsync(DataSchema entity)
         {
             await _cache.RemoveAsync(_cacheKeyGenerator(entity.SchemaName));
+            await _cache.RemoveAsync(ALL_SCHEMAS_CACHE_KEY);
 
             await base.DeleteAsync(entity);
         }
