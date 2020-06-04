@@ -14,16 +14,27 @@ namespace DaHo.M151.DataFormatValidator.Abstractions.Helpers
             {
                 var context = scope.ServiceProvider.GetRequiredService<DataContext>();
 
-                if (context.Users.Count() > 0)
+                if (!context.Users.Any())
                 {
-                    return app;
+                    context.Users.AddRange
+                    (
+                        new User { Id = 1, Username = "admin", Password = "admin", Role = Models.ServiceModels.Role.Admin },
+                        new User { Id = 2, Username = "user", Password = "user", Role = Models.ServiceModels.Role.User }
+                    );
                 }
 
-                context.Users.AddRange
-                (
-                    new User { Id = 1, Username = "admin", Password = "admin", Role = Models.ServiceModels.Role.Admin },
-                    new User { Id = 2, Username = "user", Password = "user", Role = Models.ServiceModels.Role.User }
-                );
+                if (!context.DataSchemas.Any())
+                {
+                    context.DataSchemas.AddRange
+                    (
+                        new DataSchema { Id = 1, ForFormat = Models.DataFormat.JSON, SchemaName = "JSON schema 1", Schema = "" },
+                        new DataSchema { Id = 2, ForFormat = Models.DataFormat.JSON, SchemaName = "JSON schema 2", Schema = "" },
+                        new DataSchema { Id = 3, ForFormat = Models.DataFormat.XML, SchemaName = "XML schema 1", Schema = "" },
+                        new DataSchema { Id = 4, ForFormat = Models.DataFormat.XML, SchemaName = "XML schema 2", Schema = "" },
+                        new DataSchema { Id = 5, ForFormat = Models.DataFormat.YAML, SchemaName = "YAML schema 1", Schema = "" },
+                        new DataSchema { Id = 6, ForFormat = Models.DataFormat.YAML, SchemaName = "YAML schema 2", Schema = "" }
+                    );
+                }
 
                 context.SaveChanges();
             }

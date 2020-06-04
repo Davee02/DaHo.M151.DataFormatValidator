@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DaHo.M151.DataFormatValidator.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("[controller]")]
     public class SchemasController : ControllerBase
