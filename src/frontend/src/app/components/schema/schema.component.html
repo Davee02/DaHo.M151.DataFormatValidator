@@ -5,9 +5,9 @@
 </ul>
 
 <button (click)="addSchema()">Add new</button>
+<br>
 
 <div *ngIf="selectedSchema">
-
   <select [(ngModel)]="selectedSchema.forFormat">
     <option *ngFor="let dataFormat of allDataFormats" [value]="dataFormat.key.toUpperCase()">
       {{ dataFormat.value }}
@@ -15,11 +15,14 @@
   </select>
   <br>
 
-  <input type="text" [(ngModel)]="selectedSchema.name" readonly>
+  <input type="text" [(ngModel)]="selectedSchema.name" [disabled]="!isNewSchema">
   <br>
 
   <textarea [(ngModel)]="selectedSchema.schema"></textarea>
+  <br>
 
   <button (click)="save()">Save</button>
 
 </div>
+
+<b *ngIf="errorMessage" class="error">Error: {{ errorMessage }}</b>

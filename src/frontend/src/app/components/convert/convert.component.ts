@@ -37,7 +37,6 @@ export class ConvertComponent implements OnInit {
         .toPromise();
       this.convertResult = response;
     } catch (error) {
-      console.warn(error);
     }
   }
 }

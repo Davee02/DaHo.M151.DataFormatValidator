@@ -21,7 +21,7 @@ export class SchemaService {
   }
 
   public createSchema(schema: DataSchema): Observable<any> {
-    return this.http.post(`${environment.apiBaseUrl}/schemas/`, schema);
+    return this.http.post(`${environment.apiBaseUrl}/schemas`, schema);
   }
 
   public editSchema(schema: DataSchema, schemaName: string): Observable<any> {

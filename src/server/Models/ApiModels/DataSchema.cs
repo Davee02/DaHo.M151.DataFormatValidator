@@ -10,7 +10,7 @@ namespace DaHo.M151.DataFormatValidator.Models.ApiModels
         [Required]
         public string Name { get; set; }
 
-        [Required]
+        [Required(AllowEmptyStrings = true)]
         public string Schema { get; set; }
     }
 }

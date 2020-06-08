@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DaHo.M151.DataFormatValidator.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class SchemasController : ControllerBase
@@ -76,7 +76,7 @@ namespace DaHo.M151.DataFormatValidator.Controllers
             return Ok();
         }
 
-        //[Authorize(Roles = Role.Admin)]
+        [Authorize(Roles = Role.Admin)]
         [HttpPost("{schemaName}")]
         public async Task<IActionResult> EditSchema([FromBody] DataSchema schema, [FromRoute] string schemaName)
         {
@@ -100,7 +100,7 @@ namespace DaHo.M151.DataFormatValidator.Controllers
             return Ok();
         }
 
-        //[Authorize(Roles = Role.Admin)]
+        [Authorize(Roles = Role.Admin)]
         [HttpDelete("{schemaName}")]
         public async Task<IActionResult> DeleteSchema([FromRoute] string schemaName)
         {

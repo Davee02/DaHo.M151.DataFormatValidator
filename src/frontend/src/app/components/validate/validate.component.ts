@@ -39,18 +39,14 @@ export class ValidateComponent implements OnInit {
       content: this.content,
     };
 
-    try {
-      if (this.withSchema) {
-        this.validateResult = await this.dataFormatService
-          .validateDataFormatWithSchema(requestData, this.selectedSchema)
-          .toPromise();
-      } else {
-        this.validateResult = await this.dataFormatService
-          .validateDataFormat(requestData)
-          .toPromise();
-      }
-    } catch (error) {
-      console.warn(error);
+    if (this.withSchema) {
+      this.validateResult = await this.dataFormatService
+        .validateDataFormatWithSchema(requestData, this.selectedSchema)
+        .toPromise();
+    } else {
+      this.validateResult = await this.dataFormatService
+        .validateDataFormat(requestData)
+        .toPromise();
     }
   }
 }
