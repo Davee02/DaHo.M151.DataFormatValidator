@@ -23,7 +23,7 @@ The application consists of 2 user groups:
 
 The following technologies are intended to be used:
 
-- [ReactJS](https://reactjs.org/) for the frontend
+- [Angular](https://angular.io/) for the frontend
 - [ASP.NET Core web API](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-3.1) for the REST-backend
 - [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/) for the ORM
 - [PostgreSQL](https://www.postgresql.org/) for the database
