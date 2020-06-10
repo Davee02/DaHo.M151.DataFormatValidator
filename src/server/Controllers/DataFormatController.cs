@@ -12,6 +12,7 @@ using DaHo.Library.Utilities;
 namespace DaHo.M151.DataFormatValidator.Controllers
 {
     [Authorize]
+    [Produces("application/json")]
     [ApiController]
     [Route("[controller]")]
     public class DataFormatController : ControllerBase
@@ -27,7 +28,14 @@ namespace DaHo.M151.DataFormatValidator.Controllers
             _schemaRepository = schemaRepository;
         }
 
+        /// <summary>
+        /// Converts data from one format to another
+        /// </summary>
+        /// <param name="request">The data required to perform the convertion</param>
         [HttpPost("convert")]
+        [ProducesResponseType(typeof(ConvertFormatResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public IActionResult ConvertFormat([FromBody] ConvertFormatRequest request)
         {
             var sourceDataFormatService = _dataFormatServices.FirstOrDefault(x => x.Format == request.From);
@@ -60,7 +68,13 @@ namespace DaHo.M151.DataFormatValidator.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Validates whether data is in a valid state for a given dataformat
+        /// </summary>
+        /// <param name="request">The data required to perform the validation</param>
         [HttpPost("validate")]
+        [ProducesResponseType(typeof(ValidateFormatResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult ValidateFormat([FromBody] ValidateFormatRequest request)
         {
             var dataFormatService = _dataFormatServices.FirstOrDefault(x => x.Format == request.Format);
@@ -76,7 +90,15 @@ namespace DaHo.M151.DataFormatValidator.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Validates whether data is in a valid state for a given dataformat and a schema
+        /// </summary>
+        /// <param name="request">The data required to perform the validation</param>
+        /// <param name="schemaName">The name of the schema that is used for the validation</param>
         [HttpPost("validate/{schemaName}")]
+        [ProducesResponseType(typeof(ValidateFormatResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ValidateFormatWithSchema([FromBody] ValidateFormatRequest request, [FromRoute] string schemaName)
         {
             var dataFormatService = _dataFormatServices.FirstOrDefault(x => x.Format == request.Format);
@@ -98,18 +120,22 @@ namespace DaHo.M151.DataFormatValidator.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Gets all available dataformats
+        /// </summary>
         [HttpGet("list")]
-        public Task<IActionResult> GetAllDataFormats()
+        [ProducesResponseType(typeof(IEnumerable<DataFormatResponse>), StatusCodes.Status200OK)]
+        public IActionResult GetAllDataFormats()
         {
             var allFormats = EnumUtilities
                 .GetEnumValues<DataFormat>()
-                .Select(x => new
+                .Select(x => new DataFormatResponse
                 {
                     Key = x.ToString().ToLower(),
                     Value = x.ToString().ToUpper()
                 });
 
-            return Task.FromResult<IActionResult>(Ok(allFormats));
+            return Ok(allFormats);
         }
     }
 }
