@@ -33,5 +33,11 @@ export class AuthComponent implements OnInit {
 
   logout(): void {
     this.authService.logOut();
+
+    alert("Logout was successful!");
+  }
+
+  public get isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
   }
 }

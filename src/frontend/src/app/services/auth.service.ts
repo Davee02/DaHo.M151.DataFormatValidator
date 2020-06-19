@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { environment } from "../../environments/environment";
 import { AuthenticateRequest } from "../models/authenticateRequest";
 import { AuthenticateResponse } from "../models/authenticateResponse";
+import { isNullOrUndefined } from "util";
 
 @Injectable({
   providedIn: "root",
@@ -32,5 +33,9 @@ export class AuthService {
 
   public logOut(): void {
     localStorage.removeItem(AuthService.TOKEN_KEY);
+  }
+
+  public isLoggedIn(): boolean {
+    return !isNullOrUndefined(localStorage.getItem(AuthService.TOKEN_KEY));
   }
 }
