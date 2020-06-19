@@ -8,12 +8,12 @@ import { AuthenticateResponse } from "../models/authenticateResponse";
   providedIn: "root",
 })
 export class AuthService {
-  private static token: string;
+  private static readonly TOKEN_KEY = "bearerToken";
 
   constructor(private http: HttpClient) {}
 
   public getToken(): string {
-    return AuthService.token;
+    return localStorage.getItem(AuthService.TOKEN_KEY);
   }
 
   public async logIn(
@@ -26,7 +26,11 @@ export class AuthService {
       )
       .toPromise();
 
-      AuthService.token = response.token;
+    localStorage.setItem(AuthService.TOKEN_KEY, response.token);
     return response;
+  }
+
+  public logOut(): void {
+    localStorage.removeItem(AuthService.TOKEN_KEY);
   }
 }

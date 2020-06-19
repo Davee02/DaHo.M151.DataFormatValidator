@@ -18,7 +18,7 @@ export class InterceptorService implements HttpInterceptor {
   handleError(error: HttpErrorResponse) {
     console.warn(error);
 
-    if (error.status === 401) {
+    if (error.status === 401 || error.status === 403) {
       alert(
         "You do not have enough rights or aren't even logged in to perform this action! Please use the auth section to log in!"
       );

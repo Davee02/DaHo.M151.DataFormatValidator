@@ -21,6 +21,17 @@ export class AuthComponent implements OnInit {
       password: this.password,
     };
 
-    this.authService.logIn(authData);
+    try {
+      await this.authService.logIn(authData);
+    } catch (error) {
+      alert(error.error);
+      return;
+    }
+
+    alert("Login was successful!");
+  }
+
+  logout(): void {
+    this.authService.logOut();
   }
 }

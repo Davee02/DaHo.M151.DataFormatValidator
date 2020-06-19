@@ -4,11 +4,12 @@ services:
 
   db:
     image: postgres
-    restart: always
     environment:
       POSTGRES_USER: david
       POSTGRES_PASSWORD: mystrongpassword
       POSTGRES_DB: dataformatvalidator
+    ports:
+      - 5432:5432
     restart: always
 
   web:
@@ -19,6 +20,7 @@ services:
       - 5000:5000
     depends_on: 
       - db
+      - redis
     restart: always
 
   frontend:
@@ -33,4 +35,6 @@ services:
     image: 'bitnami/redis'
     environment:
       REDIS_PASSWORD: mystrongpassword
+    ports:
+      - 6379:6379
     restart: always
